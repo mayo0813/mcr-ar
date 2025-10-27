@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="황아영 AR 뷰어">
+    <title>황아영</title>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Apple SD Gothic Neo', sans-serif;
+            background: #ffffff;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: #ffffff;
+            color: #333;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+            z-index: 10;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        model-viewer {
+            flex: 1;
+            width: 100%;
+            background: #ffffff;
+        }
+        
+        .ar-button {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.2s ease;
+            z-index: 100;
+        }
+        
+        .ar-button:hover {
+            transform: translateX(-50%) translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            background: #000;
+        }
+        
+        .ar-button:active {
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .ar-button {
+                padding: 12px 28px;
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>황아영</h1>
+        </div>
+        
+        <model-viewer 
+            src="mcr.glb"
+            ar 
+            ar-modes="webxr scene-viewer quick-look"
+            ar-placement="floor"
+            camera-controls 
+            touch-action="pan-y"
+            shadow-intensity="1"
+            camera-orbit="0deg 75deg 2.5m"
+            camera-target="auto 1.5m auto"
+            min-camera-orbit="auto auto 0.5m"
+            max-camera-orbit="auto auto 100m"
+            field-of-view="45deg"
+            environment-image="neutral"
+            shadow-softness="1"
+            exposure="1"
+            ar-scale="fixed">
+            
+            <button slot="ar-button" class="ar-button">
+                AR로 보기
+            </button>
+            
+            <div class="ar-prompt" style="position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 500; pointer-events: none; z-index: 100;">
+                AR로 보기
+            </div>
+        </model-viewer>
+    </div>
+    
+    <script>
+        const modelViewer = document.querySelector('model-viewer');
+        
+        modelViewer.addEventListener('load', () => {
+            console.log('Model loaded successfully!');
+        });
+        
+        modelViewer.addEventListener('error', (event) => {
+            console.error('Error loading model:', event);
+        });
+        
+        modelViewer.addEventListener('ar-status', (event) => {
+            if (event.detail.status === 'session-started') {
+                console.log('AR session started');
+            }
+        });
+    </script>
+</body>
+</html>
